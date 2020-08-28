@@ -1,0 +1,153 @@
+# Example input for methanation
+#
+# This is an example of a comment. Comments should have a # as the first character on a line.
+#
+##############################################
+# the line below tells the program to start indexing all compounds
+&compounds
+# the next lines will define your compounds
+# format: NAME; isSite? ; starting concentration
+# So the first line reads: 	Compound 1 is called CO
+#							Compound 1 is not a surface site (so it is a non changing gas species)
+#							Compound 1 has a starting concentration of 1.0
+#							(note that the gas species concentrations are normalized
+#							according to the total pressure defined in the settings)
+Haqu;           0;  1.0
+NO3-;  		0;  1.0
+H2;  		0;  0.0
+N2; 		0;  0.0
+N2O; 		0;  0.0
+H2O;            0;  0.0
+NO;             0;  0.0
+NH3;            0;  0.0
+# Adsorbent names can be anything, as long as you put a 1 as isSite?.
+# To avoid confusion it is generally best to use a symbol like * to represent a free surface site
+# and use NAME* for NAME adsorbed on the surface.
+NO3*; 		1; 	0.0
+H*;             1;      0.0
+NO2*; 		1; 	0.0
+NO*; 		1;	0.0
+N*; 		1;	0.0
+NH*;            1;      0.0
+NH2*;           1;      0.0
+NH3*;           1;      0.0
+O*; 		1;	0.0
+N2*;		1;	0.0
+N2O*; 		1;	0.0
+OH*;            1;      0.0
+H2O*; 		1;	0.0
+*;  		1;      1.0
+#
+# Note: If you have set TDRC = 1, then you also need to specify which compounds are going to be evaluated.
+#		You do this by adding an extra parameter.
+#		CO*; 		1; 	0		<-- No TDRC performed
+#		H*; 		1; 	0;	1   <-- TDRC performed
+#		C*; 		1; 	0;	0	<-- No TDRC performed
+#
+#		(although you can do it, it does not make much sense to perform TDRC on gasous species or free sites)
+#################################
+# the line below tells the program to start indexing all reactions
+&reactions
+#
+# adsorptions / desorptions - Note that adsorptions and desorption can also be done with Arhenius (AR) equations
+# it is however recommended to use Hertz-Knudsen (HK)
+#										 m^2		amu		K	sigma	sticking	J/mol
+HK; {NO}        +        {*}    =>   {NO*};             1e-19;          30;              2.87;          2;      1;                      12e3
+HK; {N2}        +        {*}    =>   {N2*};             1e-19;          28;      	 2.87;          2;      1;                      12e3
+HK; {N2O}       +        {*}    =>   {N2O*};            1e-19;          44;         	  350;          2;      1;                      12e3
+HK; {H2O}	+ 	 {*}	=>  {H2O*};		1e-19;		18;		   40;		2;	1;	 		63e3
+HK; {NH3}       +        {*}    =>  {NH3*};             1e-19;          17;                10;          3;      1;                      63e3
+# Surface reactions
+#												vf		 vb		Eaf		Eab
+AR; {NO3-}      +        {*}    => {NO3*}                   ;   1e13;   1e13;   65e3;   90e3
+AR; {NO3*} 	+ 	 {*} 	=> {NO2*} 	+ 	{O*};	1e13;	1e13;	65e3;	90e3
+AR; {NO2*} 	+ 	 {*} 	=> {NO*}	+       {O*};	1e13;   1e13; 	10e3;	39e3
+AR; {NO*} 	+ 	 {*} 	=> {N*}		+	{O*};	1e13;   1e13; 	75e3;	37e3
+AR; 2{N*} 	 	 	=> {N2*}	+	 {*};	1e13;   1e13;   10e3;	47e3
+AR; 2{NO*} 	 	 	=> {N2O*} 	+ 	{O*};	1e13;	1e13;   30e3;	57e3
+AR; {N2O*}	+	{*}	=> {N2*} 	+ 	{O*};	1e13;	1e13;	54e3;	28e3
+AR; {N*}        +       {Haqu}  => {NH*}                    ;   1e13;   1e13;   10e3;   47e3
+AR; {NH*}       +       {Haqu}  => {NH2*}                   ;   1e13;   1e13;   10e3;   47e3
+AR; {NH2*}      +       {Haqu}  => {NH3*}                   ;   1e13;   1e13;   10e3;   47e3
+AR; {O*}        +       {Haqu}  => {OH*}		    ;   1e13;   1e13;  100e3;	67e3
+AR; {OH*} 	+ 	{Haqu} 	=> {H2O*} 	 	    ;	1e13;	1e13;	92e3;	30e3
+AR; {Haqu}      +          {*}  => {H*}                     ;   1e13;   1e13;   0;      96.485e3;
+AR; {H2}        +         2{*}  => 2{H*}                    ;   1e13;   1e13;   0;      96.485e3;
+#
+#
+#
+# Note: Please use 2{*} and not {*} + {*}. The latter may sometimes give erroneous results.
+#
+# Note: If you have set DRC = 1, then you also need to specify which reactions are going to be evaluated.
+#		You do this by adding an extra parameter.
+#		AR; {CO*} 	+ 	 {*} 	=> {C*} 	+ 	{O*};	6e11;	4e12;	65e3;	90e3		<-- No DRC performed
+#		AR; {C*} 	+ 	{H*} 	=> {CH*}	+	 {*};	1e13;	2e13;	40e3;	39e3;	1   <-- DRC performed
+#		AR; {CH*} 	+ 	{H*} 	=> {CH2*}	+	 {*};	2e12;	2e11;	75e3;	37e3;	0	<-- No DRC performed
+#
+#################################
+# the lines below tell the program which settings we want to use
+&settings
+TYPE = SEQUENCERUN
+#PRESSURE =1 
+#
+#
+#The lines below can be used for some extra functionality:
+#
+#
+REAGENTS = {NO3-},{Haqu}
+#REAGENTS need to be specified for ORDERS
+#
+KEYCOMPONENTS = {N2},{NO3-},{N2O}
+#KEYCOMPONENTS need to be specified for ORDERS, EACT, DRC and TDRC
+#
+USETIMESTAMP = 0
+#The results are placed in a folder called 'run' instead of a time-stamped folder. (Default = 1)
+#
+#ORDERS = 1
+#Calculates the reaction orders in the reagents (Default = 0)
+#
+#EACT = 1
+#Calculates the apparent activation energy (Default = 0)
+#
+DRC = 1
+#Calculates the degree of rate control (Default = 0) - Note: Don't forget to add the extra parameter after your reactions
+#
+#TDRC = 1
+#Calculates the thermodynamic degree of rate control (Default = 0) - Note: Don't forget to add the extra parameter after your compounds
+#
+#DEBUG = 1
+#Enables debug messages. Also produces some data on relative derivatives (dydt/y) to check for convergence (Default = 0)
+#
+NPAR=4
+MAKEPLOTS=0
+#
+#################################
+# the lines below tell the program which runs we want to perform
+&runs
+#
+# Temp;	Time;	AbsTol;	RelTol
+300;	1e12;	1e-12;	1e-12
+#450;	1e6;	1e-12;	1e-12
+#500;	1e4;	1e-12;	1e-12
+#550;	1e2;	1e-12;	1e-12
+#600;	1e1;	1e-12;	1e-12
+#650;	1e1;	1e-12;	1e-12
+#700;	1e1;	1e-12;	1e-12
+#750;	1e1;	1e-12;	1e-12
+#800;	1e1;	1e-12;	1e-12
+#850;	1e1;	1e-12;	1e-12
+#900;	1e1;	1e-12;	1e-12
+#950;	1e1;	1e-12;	1e-12
+#1000;	1e1;	1e-12;	1e-12
+#1050;	1e1;	1e-12;	1e-12
+#1100;	1e1;	1e-12;	1e-12
+#1150;	1e1;	1e-12;	1e-12
+#1200;	1e1;	1e-12;	1e-12
+#1250;	1e1;	1e-12;	1e-12
+#1300;	1e1;	1e-12;	1e-12
+#1350;	1e1;	1e-12;	1e-12
+#1400;	1e1;	1e-12;	1e-12
+#
+# Note: You can also omit the tolerances. Then the default tolerances will be used. For example:
+#		400;	1e1
+#			 ^- will execute a run at 400K for 1e10 seconds at AbsTol = 1e-12 and RelTol = 1e-8
