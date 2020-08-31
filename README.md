@@ -1,8 +1,3 @@
----
-title: Rerunning NO3RR microkinetic simulations
-created: '2020-08-25T22:44:07+05:00'
----
-
 # Rerunning NO<sub>3</sub>RR microkinetic simulations
 
 ## Introduction
@@ -23,7 +18,7 @@ For reproducibility, here is a description of the tools and environment used to 
 
 ## Usage
 
-Do the following while in the `0.1V-vs-RHE` directory:
+Do the following while in the `0.1V-vs-RHE` directory and with Python 2.7 accessible from the path as `/usr/bin/python`:
 
 ``` bash
 # Generate base simulation files
