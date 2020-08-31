@@ -12,9 +12,9 @@ For reproducibility, here is a description of the tools and environment used to 
 
 - Calculations were performed on [KNL nodes](https://docs.nersc.gov/systems/cori/#knl-compute-nodes) of the the Cori supercomputer at the [National Energy Renewable Science Computing Center (NERSC)](https://www.nersc.gov/).
 - To run Docker images on NERSC, the [Shifter tool](https://docs.nersc.gov/development/shifter/how-to-use/) was used. Shifter allows one to run programs inside Docker images without having to specify volume mapping options to access the local file system.
-- Version 2.7.0 of the [MKMCXX microkinetic modeling software package](https://mkmcxx.nl/) was used for all calculations. This version is no longer available at the author's website, but is available as a Docker image through Docker Hub.
-- GNU Parallel 20190222 was used to parallelize individual microkinetic simulations. Its application is shown in the code below.
-- The Conda environment used in the Jupyter notebook that reads simulation results and produces plots is given in `conda-package-lock.yml`.
+- Version 2.7.0 of the [MKMCXX microkinetic modeling software package](https://mkmcxx.nl/) was used for all calculations. This version is no longer available at the author's website, but is available as a [Docker image through Docker Hub](https://hub.docker.com/r/samueldy/mkmcxx/tags).
+- [GNU Parallel](https://www.gnu.org/software/parallel/) 20190222 was used to parallelize individual microkinetic simulations. Its usage is shown in the code below.
+- The [Conda](https://www.anaconda.com/) environment used in the [Jupyter](https://jupyter.org/) notebook that reads simulation results and produces plots is given in `conda-package-lock.yml`.
 
 ## Usage
 
