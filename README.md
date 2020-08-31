@@ -3,8 +3,7 @@
 ## Introduction
 
 - For our PtRu manuscript, we desired to include a degree-of-rate-control (DRC) plot in order to bolster our argument for why Pt<sub>75</sub>Ru<sub>25</sub>/C is experimentally observed to yield the highest NO3RR activity.
-- Jin-Xun Liu ran these microkinetics simulations at -0.2 V, 0.0 V, 0.1 V, 0.2 V, and 0.4 V vs. RHE. However, for the 0.1 V vs. RHE simulation, he generated only the turnover frequency (TOF) volcano plot and not the DRC data. So I set out to rerun his calculations at 0.1 V vs. RHE, with DRC analysis turned on.
-- I adapted his code in order to correct an adsorption energy error and save time by running the simulations in parallel. For clarity, I will include the code and briefly go over its usage.
+- [Our previous work](https://pubs.acs.org/doi/abs/10.1021/acscatal.9b02179) ran these microkinetics simulations at 0.1 V vs. RHE but did not include DRC results. We reran these calculations at 0.1 V vs. RHE with similar inputs and with DRC analysis turned on.
 
 ## Programming environment
 
@@ -48,9 +47,8 @@ sbatch runTask-cori-knl.slurm
 
 ## Results
 
-- A Jupyter notebook is used to parse and read results, as I was not able to get JXL's analysis code to run. This notebook makes heavy use of my `samueldy_atomistic_utils.microkinetics.mkmcxx` class, which is currently hosted [here](https://gitlab.com/samueldy-general-research/samueldy-atomistic-utils/-/blob/develop/src/samueldy_atomistic_utils/microkinetics/mkmcxx.py). Although not in a fully developed state, this library is able to parse the results of MKMCXX simulations for further analysis.
-- The usage of this library to process results and produce plots appears below.
-- The Jupyter notebook `01-jul-2020_ptru-kinetics-plots.ipynb` produces DRC and TOF plots based on microkinetics data for the PtRu alloy project, and is summarized below.
+- A Jupyter notebook (`01-jul-2020_ptru-kinetics-plots.ipynb`) is used to parse and read results and produce DRC and TOF plots based on microkinetics data. This notebook makes heavy use of the `mkmcxx` Python module, which is included.
+- The usage of this module to process results and produce plots appears below.
 
 ### Degree of rate control plot
 
